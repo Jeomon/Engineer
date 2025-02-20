@@ -5,6 +5,7 @@ class EngineerState(TypedDict):
     title:str
     overview:str
     libraries:list[str]
+    tree_structure:str
     input:str
     output:str
     plan_data:str

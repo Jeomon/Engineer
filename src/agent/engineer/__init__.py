@@ -1,5 +1,5 @@
 from src.agent.engineer.utils import read_markdown_file, build_structure, iterate_files, write_code
-from src.agent.engineer.structure.utils import parse_structure
+from src.agent.engineer.structure.utils import parse_structure, get_tree
 from src.agent.engineer.develop.utils import parse_develop
 from src.agent.engineer.plan.utils import parse_plan
 from src.message import SystemMessage,HumanMessage
@@ -42,17 +42,20 @@ class Engineer(BaseAgent):
         response=self.llm.invoke(messages)
         structure_data=parse_structure(response.content)
         build_structure(structure_data.folder)
+        tree_structure=get_tree(structure_data)
         if self.verbose:
+            print(colored(f'File structure:\n{tree_structure}',color='cyan',attrs=['bold']))
             print(colored(f'Build the file structure successfully...',color='cyan',attrs=['bold']))
-        return {**state,'structure_data':structure_data}
+        return {**state,'structure_data':structure_data,'tree_structure':tree_structure}
 
     def develop(self,state:EngineerState):
         develop_prompt=read_markdown_file('src/agent/engineer/develop/prompt.md')
         root=state.get('structure_data')
+        tree_structure=state.get('tree_structure')
         files=[file.to_string() for file in iterate_files(root.folder)]
-        user_prompt='## Files:\n{files}\nNow, write the content for the following file.\n{file}'
+        user_prompt='## Tree Structure:\n{tree_structure}\n## Files Content:\n{files}\nNow, write the script for the following file.\n{file}'
         for file in iterate_files(root.folder):
-            messages=[SystemMessage(develop_prompt),HumanMessage(user_prompt.format(files='\n'.join(files),file=file.to_string()))]
+            messages=[SystemMessage(develop_prompt),HumanMessage(user_prompt.format(tree_structure=tree_structure,files='\n'.join(files),file=file.to_string()))]
             response=self.llm.invoke(messages)
             print(response.content)
             develop_data=parse_develop(response.content)

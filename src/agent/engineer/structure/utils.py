@@ -50,3 +50,30 @@ def parse_structure(content):
     root = ET.fromstring(xml_content)
     folder = parse_folder(root.find("Folder"))
     return Structure(folder=folder)
+
+
+def get_tree(structure:Structure, prefix=""):
+    def get_subfolder(subfolder:Folder, prefix):
+        tree_str = f"{prefix}📂 {subfolder.name}\n"
+
+        # Add files inside the subfolder
+        for file in subfolder.files:
+            tree_str += f"{prefix}   📄 {file.name}\n"
+
+        # Recursively add nested subfolders
+        for nested_subfolder in subfolder.subfolders:
+            tree_str += get_subfolder(nested_subfolder, prefix + "   ")
+
+        return tree_str
+    folder = structure.folder  # Extract root folder from the Pydantic model
+    tree_str = f"{prefix}📂 {folder.name}\n"
+
+    # Add files in the root folder
+    for file in folder.files:
+        tree_str += f"{prefix}   📄 {file.name}\n"
+
+    # Recursively add subfolders
+    for subfolder in folder.subfolders:
+        tree_str += get_subfolder(subfolder, prefix + "   ")
+
+    return tree_str.strip()  # Remove trailing newline for cleaner output
