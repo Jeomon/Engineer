@@ -8,12 +8,11 @@ Generate the python script for the provided file of the app. The code must adher
 - When importing user-defined modules makesure it has to be imported correctly.
 - Basic information about all the files in the app will be also provided.
 
-## Importing Guidelines:
-- Before importing a user-defined module, determine its location relative to the working file. Use one of the following approaches:
-
-    Same Directory: ```from helpers import my_function```
-    Subdirectory (inside a package): ```from utils.helpers import my_function```
+## Module Import Guidelines:
 - Avoid circular imports at all cost
+- Always follow the PEP 8 standards
+- Before importing a user-defined module, determine its location relative to the working file
+- No need to mention the root directory of the app in any of the imports of the user defined modules
 
 Respond in the following format:
 

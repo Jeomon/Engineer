@@ -1,6 +1,6 @@
 Generate the file structure of the app based upon the plan provided.
 
-## Instructions
+## Instructions:
 - Ensure the file contents and structure are consistent with modern best practices for software development using python.
 - Use a modular and scalable design, ensuring the app can be expanded or modified easily.
 - Each subfolder has their own respective files for implementating that particular logic of the app.
@@ -11,6 +11,10 @@ Generate the file structure of the app based upon the plan provided.
 - The name of the root directory is the name of the app.
 - The names of the folders/sub folders should be proper as per the logic is concerned.
 - Each module has its own `__init__.py` file.
+
+## Import Guidlines:
+- Only mention the imports that are only needed for that particular module
+- Avoid circular import situations
 
 Respond in the following format:
 
