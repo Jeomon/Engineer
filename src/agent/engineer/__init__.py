@@ -67,10 +67,10 @@ class Engineer(BaseAgent):
     def run(self,state:EngineerState):
         try:
             root_dir=state.get('structure_data').folder
-            cmd=['python',f'{root_dir.name}/main.py']
-            result = run(cmd, capture_output=True, text=True)
+            cmd=f'python {root_dir.name}/main.py'
+            result = run(cmd.split(' '), capture_output=True, text=True)
             if result.returncode != 0:
-                error=f"Error: {result.stderr.strip()}"
+                error=f"Error: {result.stderr.strip('')}"
             else:
                 error=''
         except Exception as e:
